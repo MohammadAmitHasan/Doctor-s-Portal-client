@@ -9,7 +9,7 @@ const Banner = () => {
             background: `url(${bg})`,
             backgroundSize: 'cover'
         }}>
-            <div className="hero-content flex-col lg:flex-row-reverse -mt-20">
+            <div className="hero-content flex-col lg:flex-row-reverse lg:-mt-20">
                 <img alt='Banner' src={chair} className="lg:max-w-xl rounded-lg shadow-2xl" />
                 <div>
                     <h1 className="text-5xl font-bold">Your New Smile Starts Here</h1>
