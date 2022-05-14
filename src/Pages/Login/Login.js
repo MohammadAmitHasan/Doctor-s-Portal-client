@@ -1,19 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import auth from '../../firebase.init';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from "react-hook-form";
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useSignInWithEmailAndPassword, useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import Loading from '../Shared/Loading';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
+    const [isRegistration, setIsRegistration] = useState(false);
+
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
 
-
-
     const { register, formState: { errors }, handleSubmit } = useForm();
-    const onSubmit = data => {
-        signInWithEmailAndPassword(data.email, data.password)
-    }
 
     const [
         signInWithEmailAndPassword,
@@ -22,30 +21,79 @@ const Login = () => {
         error,
     ] = useSignInWithEmailAndPassword(auth);
 
-    if (gUser || user) {
-        console.log(gUser, user);
+    const [
+        createUserWithEmailAndPassword,
+        rUser,
+        rLoading,
+        rError,
+    ] = useCreateUserWithEmailAndPassword(auth);
+
+    const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+
+    const onSubmit = async data => {
+        if (isRegistration) {
+            await createUserWithEmailAndPassword(data.email, data.password)
+            await updateProfile({ displayName: data.name });
+        }
+        else {
+            await signInWithEmailAndPassword(data.email, data.password)
+        }
+        console.log(data)
+    }
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const from = location?.state?.from?.pathname || '/';
+
+    if (gUser || user || rUser) {
+        navigate(from, { replace: true });
     }
 
     let loginError;
-    if (error || gError) {
+    if (error || gError || updateError || rError) {
         loginError = <p className='bg-red-500 text-white text-center py-3 px-2 rounded-lg'>
             {error?.message}{gError?.message}
         </p>
     }
 
-    if (true || loading || gLoading) {
+    if (loading || gLoading || updating || rLoading) {
         return <Loading></Loading>
     }
 
     return (
-        <div className='flex justify-center items-center h-[80vh]'>
+        <div className='flex justify-center items-center'>
             <div className="card w-96 bg-base-100 shadow-xl">
                 <div className="card-body">
-                    <h2 className="text-2xl font-semibold text-center">Login</h2>
+                    <h2 className="text-2xl font-semibold text-center">
+                        {
+                            isRegistration ? 'Sign Up' : 'Login'
+                        }
+                    </h2>
 
 
                     <form className='grid grid-cols-1 gap-3' onSubmit={handleSubmit(onSubmit)}>
                         <div className="form-control w-full max-w-xs">
+
+                            {
+                                isRegistration && <>
+                                    <label className="label">
+                                        <span className="label-text">User Name</span>
+                                    </label>
+                                    <input type="text" placeholder="Your Name" className="input input-bordered w-full max-w-xs"
+                                        {...register("name", {
+                                            required: {
+                                                value: true,
+                                                message: 'User Name required'
+                                            }
+                                        })}
+                                    />
+                                    {errors.email?.type === 'required' &&
+                                        <p className='text-red-500 mt-1 rounded-lg'>
+                                            {errors.email.message}
+                                        </p>}
+                                </>
+                            }
+
                             <label className="label">
                                 <span className="label-text">Email</span>
                             </label>
@@ -97,7 +145,16 @@ const Login = () => {
 
                         </div>
                         {loginError}
-                        <input className='btn w-full' type="submit" />
+                        <input className='btn w-full' type="submit" value={`${isRegistration ? 'Sign Up' : 'Login'}`} />
+
+                        <p>
+                            {
+                                isRegistration ?
+                                    <>Already Have an Account.?<span onClick={() => setIsRegistration(false)} className='text-secondary font-semibold cursor-pointer'> Login</span> </>
+                                    :
+                                    <>New to Doctor's Portal.?<span onClick={() => setIsRegistration(true)} className='text-secondary font-semibold cursor-pointer'> Create new Account</span> </>
+                            }
+                        </p>
                     </form>
 
 
