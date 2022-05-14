@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import auth from '../../firebase.init';
 import { useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
 import { useForm } from "react-hook-form";
@@ -45,9 +45,11 @@ const Login = () => {
     const navigate = useNavigate();
     const from = location?.state?.from?.pathname || '/';
 
-    if (gUser || user || rUser) {
-        navigate(from, { replace: true });
-    }
+    useEffect(() => {
+        if (gUser || user || rUser) {
+            navigate(from, { replace: true });
+        }
+    }, [user, gUser, rUser, from, navigate])
 
     let loginError;
     if (error || gError || updateError || rError) {
