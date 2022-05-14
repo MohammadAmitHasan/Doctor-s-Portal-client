@@ -9,7 +9,7 @@ const Service = ({ service, setTreatment }) => {
                 <p>
                     {
                         slots.length ?
-                            <span>{slots[1]}</span>
+                            <span>{slots[0]}</span>
                             :
                             <span className='text-red-500'>Try Another day</span>
                     }
