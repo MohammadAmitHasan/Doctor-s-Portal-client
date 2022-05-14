@@ -6,7 +6,7 @@ const Loading = () => {
             <div>
                 <h3 className='text-2xl mb-5 font-semibold text-neutral'>Please wait, Loading ...</h3>
                 <div className='flex justify-center'>
-                    <div class="w-24 h-24 border-b-2 border-neutral rounded-full animate-spin"></div>
+                    <div className="w-24 h-24 border-b-2 border-neutral rounded-full animate-spin"></div>
                 </div>
             </div>
         </div>
