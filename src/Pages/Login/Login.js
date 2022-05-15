@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useSignInWithEmailAndPassword, useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import Loading from '../Shared/Loading';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useToken from '../../Hooks/useToken'
 
 
 const Login = () => {
@@ -38,18 +39,19 @@ const Login = () => {
         else {
             await signInWithEmailAndPassword(data.email, data.password)
         }
-        console.log(data)
     }
 
     const location = useLocation();
     const navigate = useNavigate();
     const from = location?.state?.from?.pathname || '/';
 
+    const [token] = useToken(gUser || user || rUser)
+
     useEffect(() => {
-        if (gUser || user || rUser) {
+        if (token) {
             navigate(from, { replace: true });
         }
-    }, [user, gUser, rUser, from, navigate])
+    }, [token, from, navigate])
 
     let loginError;
     if (error || gError || updateError || rError) {

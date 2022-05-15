@@ -20,13 +20,6 @@ const AvailableAppointments = ({ date }) => {
         return <Loading></Loading>
     }
 
-
-    // useEffect(() => {
-    //     fetch(`http://localhost:5000/available?date=${formattedDate}`)
-    //         .then(res => res.json())
-    //         .then(data => setServices(data))
-    // }, [formattedDate])
-
     return (
         <div className='container mx-auto'>
             <h4 className='text-2xl font-bold text-center text-secondary my-7'>Available appointments on {format(date, 'PP')}</h4>
