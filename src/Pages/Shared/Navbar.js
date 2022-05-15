@@ -18,7 +18,10 @@ const Navbar = () => {
         <li>
             {
                 user ?
-                    <Link onClick={logoutHandle} to={'/'}>Logout</Link>
+                    <>
+                        <Link to={'/dashboard'}>Dashboard</Link>
+                        <Link onClick={logoutHandle} to={'/'}>Logout</Link>
+                    </>
                     :
                     <Link to="/login">Login</Link>
             }

@@ -16,7 +16,6 @@ const AvailableAppointments = ({ date }) => {
         fetch(`http://localhost:5000/available?date=${formattedDate}`)
             .then(res => res.json())
     )
-
     if (isLoading) {
         return <Loading></Loading>
     }

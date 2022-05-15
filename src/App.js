@@ -8,6 +8,10 @@ import Appointment from './Pages/Appointment/Appointment';
 import RequireAuth from './Pages/Shared/RequireAuth';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Dashboard from './Pages/Dashboard/Dashboard';
+import MyAppointments from './Pages/Dashboard/MyAppointments';
+import MyReview from './Pages/Dashboard/MyReview';
+import MyHistory from './Pages/Dashboard/MyHistory';
 
 
 function App() {
@@ -21,6 +25,14 @@ function App() {
             <Appointment />
           </RequireAuth>
         } />
+
+        <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} >
+          {/* Index means to open in case off root rout */}
+          <Route index element={<MyAppointments></MyAppointments>}></Route>
+          <Route path="review" element={<MyReview></MyReview>}></Route>
+          <Route path="history" element={<MyHistory></MyHistory>}></Route>
+        </Route>
+
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
       </Routes>
