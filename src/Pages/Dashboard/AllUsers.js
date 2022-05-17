@@ -5,7 +5,7 @@ import Loading from '../Shared/Loading';
 
 const AllUsers = () => {
     const { data, isLoading, refetch } = useQuery('allUsers', () =>
-        fetch('http://localhost:5000/allUsers', {
+        fetch('https://hasans-doctors-portal.herokuapp.com/allUsers', {
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
@@ -18,7 +18,7 @@ const AllUsers = () => {
     }
 
     const makeAdmin = email => {
-        fetch(`http://localhost:5000/user/admin/${email}`, {
+        fetch(`https://hasans-doctors-portal.herokuapp.com/user/admin/${email}`, {
             method: 'PUT',
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`

@@ -13,7 +13,7 @@ const MyAppointments = () => {
 
     useEffect(() => {
         if (user) {
-            fetch(`http://localhost:5000/myBookings?patient=${user.email}`, {
+            fetch(`https://hasans-doctors-portal.herokuapp.com/myBookings?patient=${user.email}`, {
                 headers: {
                     'authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 }
