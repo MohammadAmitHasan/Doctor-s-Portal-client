@@ -1,18 +1,47 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import {
-    useQuery,
-    useMutation,
-    useQueryClient,
-    QueryClient,
-    QueryClientProvider,
-} from 'react-query'
+import { useQuery } from 'react-query'
 import Loading from '../Shared/Loading'
 
 const AddDoctor = () => {
     const { register, formState: { errors }, handleSubmit } = useForm();
+
+    const imagebbKey = '50f71ff2e37c5769a41fef5f905888a8';
+
     const onSubmit = async data => {
-        console.log(data)
+        const image = data.image[0];
+        const url = `https://api.imgbb.com/1/upload?key=${imagebbKey}`;
+        const formData = new FormData();
+        formData.append('image', image);
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success === true) {
+                    const imageURL = result.data.url;
+                    const doctor = {
+                        name: data.name,
+                        email: data.email,
+                        specialty: data.specialty,
+                        image: imageURL,
+                    }
+                    fetch('http://localhost:5000/doctor', {
+                        method: 'POST',
+                        headers: {
+                            'content-type': 'application/json',
+                            'authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                        },
+                        body: JSON.stringify(doctor)
+                    })
+                        .then(res => res.json())
+                        .then(doctor => {
+                            console.log(doctor)
+                        })
+                    // Send data to server
+                }
+            })
     }
 
     const { data: services, isLoading } = useQuery('services', () =>
@@ -96,7 +125,7 @@ const AddDoctor = () => {
                             <label className="label">
                                 <span className="label-text">Doctor's Image</span>
                             </label>
-                            <input type="file" placeholder="Doctor's Image" className="input input-bordered w-full max-w-xs"
+                            <input type="file" className="input input-bordered w-full max-w-xs"
                                 {...register("image", {
                                     required: {
                                         value: true,
@@ -104,9 +133,9 @@ const AddDoctor = () => {
                                     }
                                 })}
                             />
-                            {errors.email?.type === 'required' &&
+                            {errors.image?.type === 'required' &&
                                 <p className='text-red-500 mt-1 rounded-lg'>
-                                    {errors.email.message}
+                                    {errors.image.message}
                                 </p>}
                         </div>
 
