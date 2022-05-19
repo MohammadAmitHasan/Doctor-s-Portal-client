@@ -107,11 +107,11 @@ const AddDoctor = () => {
                         </div>
 
 
-                        <div class="form-control w-full max-w-xs">
-                            <label class="label">
-                                <span class="label-text">Specialty</span>
+                        <div className="form-control w-full max-w-xs">
+                            <label className="label">
+                                <span className="label-text">Specialty</span>
                             </label>
-                            <select class="select select-bordered"
+                            <select className="select select-bordered"
                                 {...register("specialty")}
                             >
                                 {
