@@ -1,13 +1,12 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useQuery } from 'react-query'
+import { toast } from 'react-toastify';
 import Loading from '../Shared/Loading'
 
 const AddDoctor = () => {
-    const { register, formState: { errors }, handleSubmit } = useForm();
-
+    const { register, formState: { errors }, handleSubmit, reset } = useForm();
     const imagebbKey = '50f71ff2e37c5769a41fef5f905888a8';
-
     const onSubmit = async data => {
         const image = data.image[0];
         const url = `https://api.imgbb.com/1/upload?key=${imagebbKey}`;
@@ -38,8 +37,11 @@ const AddDoctor = () => {
                         .then(res => res.json())
                         .then(doctor => {
                             console.log(doctor)
+                            if (doctor.insertedId) {
+                                toast.success('Added The doctor successfully');
+                                reset();
+                            }
                         })
-                    // Send data to server
                 }
             })
     }
