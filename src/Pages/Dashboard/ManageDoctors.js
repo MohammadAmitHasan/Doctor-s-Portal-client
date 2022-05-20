@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import Loading from '../Shared/Loading';
 import { TrashIcon } from '@heroicons/react/solid'
-import { toast } from 'react-toastify';
+import DeleteConfirmModal from './DeleteConfirmModal';
 
 const ManageDoctors = () => {
+    const [deleteDoctor, setDeleteDoctor] = useState(null);
     const { data: doctors, isLoading, refetch } = useQuery('doctors', () =>
         fetch('http://localhost:5000/doctors', {
             headers: {
@@ -14,25 +15,6 @@ const ManageDoctors = () => {
 
     if (isLoading) {
         return <Loading></Loading>
-    }
-
-    const deleteHandle = email => {
-        const confirm = window.confirm('Are you sure.?')
-        if (confirm) {
-            fetch(`http://localhost:5000/doctor/${email}`, {
-                method: 'DELETE',
-                headers: {
-                    'authorization': `Bearer ${localStorage.getItem('accessToken')}`
-                }
-            })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.deletedCount > 0) {
-                        toast.success('Successfully Deleted')
-                        refetch();
-                    }
-                })
-        }
     }
 
     return (
@@ -64,7 +46,10 @@ const ManageDoctors = () => {
                                 <td>{doctor.name}</td>
                                 <td>{doctor.specialty}</td>
                                 <td>
-                                    <TrashIcon onClick={() => deleteHandle(doctor.email)} className='w-10 h-10 p-2 rounded-full text-red-600 hover:bg-red-600 hover:text-white'></TrashIcon>
+                                    <label htmlFor="delete-confirmation">
+                                        <TrashIcon onClick={() => setDeleteDoctor(doctor)} className='w-10 h-10 p-2 rounded-full text-red-600 hover:bg-red-600 hover:text-white'></TrashIcon>
+                                    </label>
+
                                 </td>
                             </tr>)
                         }
@@ -72,6 +57,14 @@ const ManageDoctors = () => {
                     </tbody>
                 </table>
             </div>
+
+            {
+                deleteDoctor && <DeleteConfirmModal
+                    deleteDoctor={deleteDoctor}
+                    refetch={refetch}
+                ></DeleteConfirmModal>
+            }
+
         </div>
     );
 };
