@@ -142,9 +142,6 @@ const AddDoctor = () => {
 
                         <input className='btn w-full max-w-xs mt-3' type="submit" value='Add' />
                     </div>
-
-
-
                 </form>
             </div>
         </div>

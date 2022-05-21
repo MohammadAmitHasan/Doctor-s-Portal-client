@@ -49,7 +49,6 @@ const ManageDoctors = () => {
                                     <label htmlFor="delete-confirmation">
                                         <TrashIcon onClick={() => setDeleteDoctor(doctor)} className='w-10 h-10 p-2 rounded-full text-red-600 hover:bg-red-600 hover:text-white'></TrashIcon>
                                     </label>
-
                                 </td>
                             </tr>)
                         }
