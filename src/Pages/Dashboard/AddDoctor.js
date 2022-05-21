@@ -26,7 +26,7 @@ const AddDoctor = () => {
                         specialty: data.specialty,
                         image: imageURL,
                     }
-                    fetch('http://localhost:5000/doctor', {
+                    fetch('https://hasans-doctors-portal.herokuapp.com/doctor', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json',
@@ -46,7 +46,7 @@ const AddDoctor = () => {
     }
 
     const { data: services, isLoading } = useQuery('services', () =>
-        fetch('http://localhost:5000/services')
+        fetch('https://hasans-doctors-portal.herokuapp.com/services')
             .then(res => res.json())
     )
 

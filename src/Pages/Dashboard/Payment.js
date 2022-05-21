@@ -11,7 +11,7 @@ const stripePromise = loadStripe('pk_test_51L1ZJ4A4Qye3rHidjC8HhO9zJZ0lGadBMT5Os
 const Payment = () => {
     const { id } = useParams();
     const { data: appointment, isLoading } = useQuery(['booking', id], () =>
-        fetch(`http://localhost:5000/booking/${id}`, {
+        fetch(`https://hasans-doctors-portal.herokuapp.com/booking/${id}`, {
             headers: {
                 'authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
